@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "instruction.release-expired-lease.request.schema.json",
+  "type": "object",
+  "required": ["instruction_id", "lease_id"],
+  "additionalProperties": false,
+  "properties": {
+    "instruction_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S+$"
+    },
+    "lease_id": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

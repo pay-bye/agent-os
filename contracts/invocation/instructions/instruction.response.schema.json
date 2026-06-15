@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "instruction.response.schema.json",
+  "type": "object",
+  "required": ["instruction_id", "result", "event_ids", "affected_count", "affected_ids"],
+  "additionalProperties": false,
+  "properties": {
+    "instruction_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S+$"
+    },
+    "result": {
+      "type": "string",
+      "enum": ["applied", "precondition_failed"]
+    },
+    "event_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "affected_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "affected_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "failed_precondition": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

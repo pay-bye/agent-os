@@ -1,0 +1,42 @@
+package	gate	floor_percent	reason
+github.com/pay-bye/agent-os/cmd/substrate	unit	65	Command parsing and dispatch tests protect executable verbs and fail-closed unknown command behavior.
+github.com/pay-bye/agent-os/internal/channel	unit	75	Channel entry, lease, and preparation validation protects queue and lease behavior before DB integration.
+github.com/pay-bye/agent-os/internal/config	unit	50	Config unit tests protect file/env/flag precedence, defaults, validation, and rooted config-file reads before executable dispatch.
+github.com/pay-bye/agent-os/internal/declaration	unit	70	Declaration parser and planner tests protect strict positive grammar, safe-change planning, and explicit installer rollback behavior.
+github.com/pay-bye/agent-os/internal/declaration/execution	unit	90	Declaration execution tests protect preview/apply transaction order, unsafe-delta rollback, and explicit installer rollback behavior.
+github.com/pay-bye/agent-os/internal/journal	unit	80	Journal event validation protects append-only payload and append-index behavior before DB integration.
+github.com/pay-bye/agent-os/internal/journal/payloads	unit	90	Journal payload tests protect persisted document keys and codecs before kernel meaning and storage persistence consume them.
+github.com/pay-bye/agent-os/internal/kernel	unit	80	Kernel command preparation and Journal replay derivation protect routing semantics before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/claiming	unit	80	Claiming command assembly protects lease grant token digest and lease window validation before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/instructions	unit	80	Instruction assembly and replay tests protect operator corrective command records, preconditions, and outcomes before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/leases	unit	80	Lease command assembly protects extend and heartbeat token digest checks before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/pause	unit	80	Pause command and safety tests protect direct node pause routability before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/resolution	unit	80	Resolution command assembly protects ack/nack token digest, declared-need, route, and failure payload facts before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/routing	unit	80	Routing tests protect outstanding-need replay and addressed/default target selection before DB integration.
+github.com/pay-bye/agent-os/internal/kernel/submission	unit	80	Submission command assembly protects work-item construction and routing event allocation before DB integration.
+github.com/pay-bye/agent-os/internal/metrics	unit	90	Metrics collector tests protect bounded label sets, text encoding, series budget, and storage-gauge failure behavior before HTTP and DB integration.
+github.com/pay-bye/agent-os/internal/process/ids	unit	80	Process ID tests protect opaque ID format, length, and random source failure behavior.
+github.com/pay-bye/agent-os/internal/processlog	unit	80	Process log record, event-matrix, correlation, sink, and non-exposure tests protect bounded diagnostic records and error-code fallback.
+github.com/pay-bye/agent-os/internal/readmodel	unit	90	Read model unit tests protect complete assembly, dependency omission, no-cache behavior, and bounded response groups before HTTP and DB integration.
+github.com/pay-bye/agent-os/internal/registry	unit	90	Registry value copies and named not-found errors protect the read contract.
+github.com/pay-bye/agent-os/internal/readmodel/postgres	unit	80	Postgres readmodel query tests protect operational projections and row hydration before HTTP integration.
+github.com/pay-bye/agent-os/internal/storage/postgres	unit	85	Postgres root tests protect adapter construction wrappers, search-path execution, and shared row mapping contracts before child stores consume them.
+github.com/pay-bye/agent-os/internal/storage/postgres/catalog	unit	20	Postgres catalog tests protect declaration read/install row translation while transaction behavior is protected by DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/storage/postgres/channel	unit	55	Postgres channel tests protect queue preparation, lease row hydration, and lease command behavior before DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/storage/postgres/journal	unit	70	Postgres journal tests protect event row hydration and append/replay behavior before DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/storage/postgres/kernel	unit	5	Postgres kernel tests protect instruction application and transaction orchestration adapters while command semantics remain in kernel packages.
+github.com/pay-bye/agent-os/internal/storage/postgres/metrics	unit	60	Postgres metrics tests protect storage aggregate row mapping before metrics collection and DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/storage/postgres/migrations	unit	40	Postgres migration tests protect planning, checksum drift detection, and migrator source selection before DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/storage/postgres/registry	unit	75	Postgres registry tests protect record row hydration and named lookup behavior before DB-backed integration tests.
+github.com/pay-bye/agent-os/internal/transport/http	unit	80	HTTP route, strict decoding, response envelope, and error-token coverage protects the accepted invocation transport before DB integration.
+github.com/pay-bye/agent-os/internal/transport/http/codec	unit	50	HTTP codec tests protect strict request decoding, payload compaction, error classification, and response writing before route families consume them.
+github.com/pay-bye/agent-os/internal/transport/http/commands	unit	80	Command route tests protect submit, claim, ack, nack, extend, heartbeat decoding and response behavior before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/compatibility	unit	95	Compatibility route tests protect contract metadata emission and method rejection before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/diagnostics	unit	80	Diagnostics endpoint tests protect bounded accept, reject, fail, and complete records before route families consume the shared chassis.
+github.com/pay-bye/agent-os/internal/transport/http/instructions	unit	35	Instruction route tests protect operator-key gating, dispatch decoding, and precondition conflict responses before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/operations	unit	45	Operations route tests protect report response, bounded read query parsing, and malformed query rejection before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/probes	unit	80	Probe route tests protect live and readiness response shape plus body rejection before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/scrape	unit	95	Metrics scrape route tests protect bounded text output and invalid request rejection before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/security	unit	80	Security gate tests protect bearer and operator-key rejection before root handler composition.
+github.com/pay-bye/agent-os/internal/transport/http/security/credential	unit	80	Credential verifier tests protect digest and file source authority, strict JSON decoding, and operator-key verifier loading before HTTP integration.
+github.com/pay-bye/agent-os/internal/workitem	unit	90	Submission construction rejects invalid values and protects payload aliases.

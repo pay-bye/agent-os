@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "health.response.schema.json",
+  "type": "object",
+  "required": ["result"],
+  "additionalProperties": false,
+  "properties": {
+    "result": {"type": "string", "const": "live"}
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operations.nodes.response.schema.json",
+  "type": "object",
+  "required": ["nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["node_key", "channel_key", "need_kinds", "routable"],
+        "additionalProperties": false,
+        "properties": {
+          "node_key": { "type": "string", "minLength": 1 },
+          "channel_key": { "type": "string", "minLength": 1 },
+          "need_kinds": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "routable": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

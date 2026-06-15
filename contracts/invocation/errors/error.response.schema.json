@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error.response.schema.json",
+  "type": "object",
+  "required": ["error"],
+  "additionalProperties": false,
+  "properties": {
+    "error": {
+      "type": "string",
+      "enum": [
+        "invalid_input",
+        "unknown_vocabulary",
+        "empty_queue",
+        "invalid_lease",
+        "expired_lease",
+        "no_route",
+        "conflict"
+      ]
+    }
+  }
+}

@@ -1,0 +1,812 @@
+openapi: 3.1.0
+info:
+  title: Invocation Contract
+  version: v1
+security:
+  - credential: []
+paths:
+  /submit:
+    post:
+      operationId: submit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/submit.request.schema.json
+      responses:
+        "200":
+          description: Accepted submission result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/submit.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: unknown_vocabulary or no_route
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /claim:
+    post:
+      operationId: claim
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/claim.request.schema.json
+      responses:
+        "200":
+          description: Queue claim result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/claim.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: unknown_vocabulary or empty_queue
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /ack:
+    post:
+      operationId: ack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/ack.request.schema.json
+      responses:
+        "200":
+          description: Successful lease resolution result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/ack.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: unknown_vocabulary, invalid_lease, expired_lease, or no_route
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /nack:
+    post:
+      operationId: nack
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/nack.request.schema.json
+      responses:
+        "200":
+          description: Failed lease resolution result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/nack.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: unknown_vocabulary, invalid_lease, expired_lease, or no_route
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /extend:
+    post:
+      operationId: extend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/extend.request.schema.json
+      responses:
+        "200":
+          description: Lease extension result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/extend.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: invalid_lease or expired_lease
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /heartbeat:
+    post:
+      operationId: heartbeat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./commands/heartbeat.request.schema.json
+      responses:
+        "200":
+          description: Lease liveness result
+          content:
+            application/json:
+              schema:
+                $ref: ./commands/heartbeat.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: invalid_lease or expired_lease
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          description: Process liveness result
+          content:
+            application/json:
+              schema:
+                $ref: ./probes/health.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /readyz:
+    get:
+      operationId: readyz
+      responses:
+        "200":
+          description: Invocation readiness result
+          content:
+            application/json:
+              schema:
+                $ref: ./probes/readyz.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          description: Invocation readiness failed
+          content:
+            application/json:
+              schema:
+                $ref: ./probes/readyz.response.schema.json
+  /metrics:
+    get:
+      operationId: metrics
+      responses:
+        "200":
+          description: Bounded metrics exposition
+          content:
+            text/plain; version=0.0.4; charset=utf-8:
+              schema:
+                type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /operations:
+    get:
+      operationId: operations
+      responses:
+        "200":
+          description: Operational read model result
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          description: Operational read model dependencies unavailable
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.response.schema.json
+  /operations/channels:
+    get:
+      operationId: operationChannels
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+        - name: after_channel_key
+          in: query
+          schema:
+            type: string
+        - name: older_than_seconds
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        "200":
+          description: Channel locator rows
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.channels.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /operations/channels/{channel_key}/items:
+    get:
+      operationId: operationChannelItems
+      parameters:
+        - name: channel_key
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: older_than_seconds
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+        - name: lease_view
+          in: query
+          schema:
+            type: string
+            enum: [all, expired, held, none]
+            default: all
+      responses:
+        "200":
+          description: Channel item locator rows
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.channel-items.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /operations/items/{work_item_id}:
+    get:
+      operationId: operationItem
+      parameters:
+        - name: work_item_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Work item locator facts
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.item.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /operations/items/{work_item_id}/journal:
+    get:
+      operationId: operationItemJournal
+      parameters:
+        - name: work_item_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+        - name: after_append_index
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        "200":
+          description: Work item journal metadata replay
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.item-journal.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /operations/nodes:
+    get:
+      operationId: operationNodes
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 100
+        - name: after_node_key
+          in: query
+          schema:
+            type: string
+        - name: need_kind
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Node roster facts
+          content:
+            application/json:
+              schema:
+                $ref: ./operations/operations.nodes.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+  /operations/instructions/pause:
+    post:
+      operationId: instructionPause
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.pause.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/release-expired-lease:
+    post:
+      operationId: instructionReleaseExpiredLease
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.release-expired-lease.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/force-release-lease:
+    post:
+      operationId: instructionForceReleaseLease
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.force-release-lease.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/move-item:
+    post:
+      operationId: instructionMoveItem
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.move-item.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/move-entries:
+    post:
+      operationId: instructionMoveEntries
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.move-entries.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/move-available:
+    post:
+      operationId: instructionMoveAvailable
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.move-available.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/drop:
+    post:
+      operationId: instructionDrop
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.drop.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /operations/instructions/route-outstanding:
+    post:
+      operationId: instructionRouteOutstanding
+      parameters:
+        - name: Operator-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./instructions/instruction.route-outstanding.request.schema.json
+      responses:
+        "200":
+          description: Instruction applied
+          content:
+            application/json:
+              schema:
+                $ref: ./instructions/instruction.response.schema.json
+        "400":
+          description: invalid_input
+          content:
+            application/json:
+              schema:
+                $ref: ./errors/error.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: precondition_failed or conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: ./instructions/instruction.response.schema.json
+                  - $ref: ./errors/error.response.schema.json
+  /compatibility:
+    get:
+      operationId: compatibility
+      responses:
+        "200":
+          description: Invocation compatibility metadata
+          content:
+            application/json:
+              schema:
+                $ref: ./compatibility/compatibility.response.schema.json
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+components:
+  securitySchemes:
+    credential:
+      type: http
+      scheme: bearer
+  responses:
+    Unauthorized:
+      description: Unauthorized

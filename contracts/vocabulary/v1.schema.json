@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "schemas", "items", "needs", "nodes", "routes"],
+  "$defs": {
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    }
+  },
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "schemas": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/key"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["document"],
+        "properties": {
+          "document": {}
+        }
+      }
+    },
+    "items": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/key"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["schema", "description"],
+        "properties": {
+          "schema": {
+            "$ref": "#/$defs/key"
+          },
+          "description": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "needs": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/key"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description"],
+        "properties": {
+          "schema": {
+            "$ref": "#/$defs/key"
+          },
+          "description": {
+            "$ref": "#/$defs/nonEmptyString"
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/key"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["description", "accepts"],
+        "properties": {
+          "description": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "accepts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/key"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "routes": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/key"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["node"],
+          "properties": {
+            "node": {
+              "$ref": "#/$defs/key"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "claim.response.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["empty"],
+      "additionalProperties": false,
+      "properties": {
+        "empty": {"type": "boolean", "const": true}
+      }
+    },
+    {
+      "type": "object",
+      "required": ["empty", "lease_id", "lease_token", "work_item_id", "payload", "expires_at"],
+      "additionalProperties": false,
+      "properties": {
+        "empty": {"type": "boolean", "const": false},
+        "lease_id": {"type": "string", "minLength": 1},
+        "lease_token": {"type": "string", "minLength": 1},
+        "work_item_id": {"type": "string", "minLength": 1},
+        "payload": {"type": "object"},
+        "expires_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  ]
+}

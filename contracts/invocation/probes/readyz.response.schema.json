@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "readyz.response.schema.json",
+  "type": "object",
+  "required": ["result", "checks"],
+  "additionalProperties": false,
+  "properties": {
+    "result": {
+      "oneOf": [
+        {"type": "string", "const": "ready"},
+        {"type": "string", "const": "not_ready"}
+      ]
+    },
+    "checks": {
+      "type": "object",
+      "required": ["startup", "storage", "migrations", "verifier", "declaration", "handler"],
+      "additionalProperties": false,
+      "properties": {
+        "startup": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]},
+        "storage": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]},
+        "migrations": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]},
+        "verifier": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]},
+        "declaration": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]},
+        "handler": {"oneOf": [{"type": "string", "const": "ready"}, {"type": "string", "const": "not_ready"}]}
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ack.response.schema.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["resolved", "routed", "channel_key"],
+      "additionalProperties": false,
+      "properties": {
+        "resolved": {"type": "boolean", "const": true},
+        "routed": {"type": "boolean", "const": true},
+        "channel_key": {"type": "string", "minLength": 1}
+      }
+    },
+    {
+      "type": "object",
+      "required": ["resolved", "routed"],
+      "additionalProperties": false,
+      "properties": {
+        "resolved": {"type": "boolean", "const": true},
+        "routed": {"type": "boolean", "const": false}
+      }
+    }
+  ]
+}

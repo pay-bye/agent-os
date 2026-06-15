@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "submit.request.schema.json",
+  "type": "object",
+  "required": ["work_item_id", "item_kind", "payload", "declared_needs"],
+  "additionalProperties": false,
+  "properties": {
+    "work_item_id": {"type": "string", "minLength": 1},
+    "item_kind": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"},
+    "declared_needs": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["need_kind"],
+        "additionalProperties": false,
+        "properties": {
+          "need_kind": {"type": "string", "minLength": 1},
+          "target_node": {"type": "string", "minLength": 1},
+          "payload": {"type": "object"}
+        }
+      }
+    }
+  }
+}

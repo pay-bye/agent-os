@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operations.item-journal.response.schema.json",
+  "type": "object",
+  "required": ["events"],
+  "additionalProperties": false,
+  "properties": {
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_id", "event_kind", "appended_at", "append_index", "metadata"],
+        "additionalProperties": false,
+        "properties": {
+          "event_id": { "type": "string", "minLength": 1 },
+          "event_kind": { "type": "string", "minLength": 1 },
+          "appended_at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+          "append_index": { "type": "integer", "minimum": 1 },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "work_item_id": { "type": "string", "minLength": 1 },
+              "item_kind": { "type": "string", "minLength": 1 },
+              "need_kind": { "type": "string", "minLength": 1 },
+              "target_node": { "type": "string", "minLength": 1 },
+              "channel_key": { "type": "string", "minLength": 1 },
+              "node_key": { "type": "string", "minLength": 1 },
+              "lease_id": { "type": "string", "minLength": 1 },
+              "entry_id": { "type": "string", "minLength": 1 },
+              "routing_rule_order": { "type": "integer", "minimum": 1 },
+              "result": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

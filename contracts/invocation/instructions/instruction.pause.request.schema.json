@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "instruction.pause.request.schema.json",
+  "type": "object",
+  "required": ["instruction_id", "node_key"],
+  "additionalProperties": false,
+  "properties": {
+    "instruction_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S+$"
+    },
+    "node_key": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

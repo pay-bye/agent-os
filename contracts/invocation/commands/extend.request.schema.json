@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "extend.request.schema.json",
+  "type": "object",
+  "required": ["lease_id", "lease_token", "requested_expires_at"],
+  "additionalProperties": false,
+  "properties": {
+    "lease_id": {"type": "string", "minLength": 1},
+    "lease_token": {"type": "string", "minLength": 1},
+    "requested_expires_at": {"type": "string", "format": "date-time"}
+  }
+}

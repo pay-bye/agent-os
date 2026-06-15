@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "operations.channels.response.schema.json",
+  "type": "object",
+  "required": ["channels"],
+  "additionalProperties": false,
+  "properties": {
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["channel_key", "node_key", "depth", "available", "oldest_available_age_seconds"],
+        "additionalProperties": false,
+        "properties": {
+          "channel_key": { "type": "string", "minLength": 1 },
+          "node_key": { "type": "string", "minLength": 1 },
+          "depth": { "type": "integer", "minimum": 0 },
+          "available": { "type": "integer", "minimum": 0 },
+          "oldest_available_age_seconds": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

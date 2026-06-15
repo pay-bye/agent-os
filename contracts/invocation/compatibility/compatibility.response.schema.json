@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "compatibility.response.schema.json",
+  "type": "object",
+  "required": ["contract_version", "schema_set_digest", "features", "routes"],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "schema_set_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "features": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "type": "string", "const": "lease_claim" },
+          { "type": "string", "const": "lease_extend" },
+          { "type": "string", "const": "lease_ack" },
+          { "type": "string", "const": "lease_nack" },
+          { "type": "string", "const": "lease_capability" },
+          { "type": "string", "const": "declared_needs" },
+          { "type": "string", "const": "failure_payload" }
+        ]
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/submit" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/claim" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/ack" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/nack" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/extend" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/heartbeat" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/pause" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/release-expired-lease" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/force-release-lease" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/move-item" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/move-entries" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/move-available" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/drop" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "POST" },
+              "path": { "type": "string", "const": "/operations/instructions/route-outstanding" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/health" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/readyz" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/metrics" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations/channels" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations/channels/{channel_key}/items" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations/items/{work_item_id}" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations/items/{work_item_id}/journal" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/operations/nodes" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string", "const": "GET" },
+              "path": { "type": "string", "const": "/compatibility" }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

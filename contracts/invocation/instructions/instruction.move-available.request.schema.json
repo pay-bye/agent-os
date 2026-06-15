@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "instruction.move-available.request.schema.json",
+  "type": "object",
+  "required": ["instruction_id", "source_channel_key", "target_channel_key", "limit"],
+  "additionalProperties": false,
+  "properties": {
+    "instruction_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S+$"
+    },
+    "source_channel_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_channel_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "limit": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    }
+  }
+}

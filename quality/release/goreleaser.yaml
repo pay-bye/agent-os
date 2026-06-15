@@ -1,0 +1,124 @@
+version: 2
+pro: true
+project_name: agent-os
+dist: dist/release
+
+monorepo:
+  tag_prefix: agent-os/
+  dir: .
+
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
+
+builds:
+  - id: substrate
+    main: ./cmd/substrate
+    binary: agent-os
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+
+archives:
+  - id: archives
+    ids:
+      - substrate
+    formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+docker_digest:
+  name_template: digests.txt
+
+dockers_v2:
+  - id: image
+    ids:
+      - substrate
+    dockerfile: quality/release/Dockerfile
+    images:
+      - "ghcr.io/{{ .Env.RELEASE_IMAGE_OWNER }}/agent-os"
+    tags:
+      - "{{ .Version }}"
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    sbom: true
+    labels:
+      "org.opencontainers.image.title": agent-os
+      "org.opencontainers.image.revision": "{{ .FullCommit }}"
+      "org.opencontainers.image.version": "{{ .Version }}"
+      "org.opencontainers.image.source": "{{ .GitURL }}"
+
+sboms:
+  - id: archives
+    artifacts: archive
+    documents:
+      - "{{ .ArtifactName }}.spdx.json"
+    cmd: syft
+    args:
+      - "$artifact"
+      - "--output"
+      - "spdx-json=$document"
+
+signs:
+  - id: checksums
+    if: "{{ not .IsSnapshot }}"
+    cmd: cosign
+    signature: "${artifact}.sigstore.json"
+    args:
+      - sign-blob
+      - "--bundle=${signature}"
+      - "${artifact}"
+      - --yes
+    artifacts: checksum
+
+homebrew_casks:
+  - name: agent-os
+    ids:
+      - archives
+    binaries:
+      - agent-os
+    repository:
+      owner: "{{ .Env.RELEASE_TAP_OWNER }}"
+      name: "{{ .Env.RELEASE_TAP_NAME }}"
+      token: "{{ .Env.RELEASE_TAP_TOKEN }}"
+    directory: Casks
+    homepage: "https://github.com/{{ .Env.RELEASE_IMAGE_OWNER }}/agent-os"
+    description: "Autonomous operations substrate"
+    skip_upload: true
+
+release:
+  github:
+    owner: "{{ .Env.RELEASE_IMAGE_OWNER }}"
+    name: agent-os
+  header: |
+    ## Install
+
+    Use the archive, Homebrew cask, or GHCR examples from docs/install.md.
+
+    ## Verify
+
+    Verify checksums, Sigstore bundle, GitHub attestations, SBOMs, and provenance before execution.
+
+    ## Upgrade
+
+    Install the newer immutable tag after its evidence validates.
+
+    ## Rollback
+
+    Do not move release tags. Install a superseding tag or follow the withdrawal note in release evidence.
+
+snapshot:
+  version_template: "0.0.0-snapshot-{{ .ShortCommit }}"

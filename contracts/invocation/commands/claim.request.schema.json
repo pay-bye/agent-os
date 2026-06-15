@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "claim.request.schema.json",
+  "type": "object",
+  "required": ["channel_key", "lease_id", "lease_seconds"],
+  "additionalProperties": false,
+  "properties": {
+    "channel_key": {"type": "string", "minLength": 1},
+    "lease_id": {"type": "string", "minLength": 1},
+    "lease_seconds": {"type": "integer", "minimum": 1}
+  }
+}
