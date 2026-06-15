@@ -26,6 +26,7 @@ func TestArchitectureEvidenceIsSortedByResponsibility(t *testing.T) {
 		"release_evidence_test.go",
 		"release_fixture_test.go",
 		"release_verify_test.go",
+		"workflow_path_test.go",
 	})
 	assertDirectoryContents(t, "tests/architecture/verification", []string{
 		"coverage_test.go",
@@ -50,6 +51,12 @@ func TestRejectsForbiddenPaths(t *testing.T) {
 			assertViolation(t, map[string]string{path: "x"}, rule.Rule, path)
 		})
 	}
+}
+
+func TestAcceptsReleaseWorkflowRoot(t *testing.T) {
+	assertClean(t, map[string]string{
+		".github/workflows/release-agent-os.yml": "name: release agent-os\n",
+	})
 }
 
 func TestContractDocumentsStayUnderContracts(t *testing.T) {

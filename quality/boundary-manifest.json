@@ -4,6 +4,7 @@
   "allowed_top_level_roots": {
     "rule": "top-level-source-root-category-preservation",
     "names": [
+      ".github",
       "go.mod",
       "go.sum",
       "CODE_OF_CONDUCT.md",

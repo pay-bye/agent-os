@@ -15,6 +15,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const releaseWorkflowFile = ".github/workflows/release-agent-os.yml"
+
 func findRoot(t *testing.T) string {
 	t.Helper()
 
@@ -77,12 +79,26 @@ func readText(t *testing.T, path string) string {
 
 func workflowPath(t *testing.T) string {
 	t.Helper()
-	return filepath.Join(repoRoot(t), ".github", "workflows", "release-agent-os.yml")
+	path, ok := releaseWorkflowPath(findRoot(t))
+	if !ok {
+		t.Fatal("release workflow not found")
+	}
+	return path
 }
 
-func repoRoot(t *testing.T) string {
-	t.Helper()
-	return filepath.Clean(filepath.Join(findRoot(t), "..", "..", ".."))
+func releaseWorkflowPath(sourceRoot string) (string, bool) {
+	dir := filepath.Clean(sourceRoot)
+	for {
+		path := filepath.Join(dir, filepath.FromSlash(releaseWorkflowFile))
+		if exists(path) {
+			return path, true
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", false
+		}
+		dir = parent
+	}
 }
 
 func runGuard(t *testing.T, tag string, extraEnv []string) (string, error) {
