@@ -10,7 +10,7 @@ func TestPayloadReferencesPublishedReleaseSurfaces(t *testing.T) {
 
 	requireSourceRepository(t, payload, "example/agent-os")
 	requireHomebrewTap(t, payload, "example/homebrew-tap")
-	requireReleaseURL(t, payload, "https://github.com/example/agent-os/releases/tag/agent-os/v0.1.0-rc.1")
+	requireReleaseURL(t, payload, "https://github.com/example/agent-os/releases/tag/v0.1.0-rc.1")
 	requireImageOwners(t, payload, "ghcr.io/example/agent-os")
 	requireReferenceOwners(t, payload, "https://github.com/example/agent-os/releases/download/")
 }

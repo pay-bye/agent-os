@@ -14,8 +14,8 @@ guard_publish() {
 
 require_protected_tag() {
   local tag="$1"
-  if [[ ! "$tag" =~ ^agent-os/v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]]; then
-    echo "release tag must match agent-os/vMAJOR.MINOR.PATCH or release candidate form" >&2
+  if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]]; then
+    echo "release tag must match vMAJOR.MINOR.PATCH or release candidate form" >&2
     return 1
   fi
   if [[ "${GITHUB_REF_PROTECTED:-}" != "true" ]]; then
@@ -32,7 +32,7 @@ require_destinations() {
 }
 
 require_version_evidence() {
-  local version="${1#agent-os/}"
+  local version="$1"
   if [[ "$version" =~ -rc\.[0-9]+$ ]]; then
     return 0
   fi

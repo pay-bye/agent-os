@@ -55,7 +55,7 @@ func invalidPayloadCases() []payloadCase {
 func validPayload() map[string]any {
 	return map[string]any{
 		"version": int(1),
-		"tag":     "agent-os/v0.1.0-rc.1",
+		"tag":     "v0.1.0-rc.1",
 		"commit":  "0123456789abcdef",
 		"source": map[string]any{
 			"repository": "example/agent-os",
@@ -78,7 +78,7 @@ func validPayload() map[string]any {
 			"reason":         "public_destination_missing",
 		},
 		"notes": map[string]any{
-			"release_url": "https://github.com/example/agent-os/releases/tag/agent-os/v0.1.0-rc.1",
+			"release_url": "https://github.com/example/agent-os/releases/tag/v0.1.0-rc.1",
 			"install":     "install from signed archive, Homebrew cask, or GHCR image",
 			"verify":      "verify checksums, signatures, attestations, SBOMs, and provenance",
 			"upgrade":     "install the newer immutable tag after signatures, attestations, SBOMs, and provenance validate",
@@ -147,7 +147,7 @@ func references(subject string) []any {
 	return []any{
 		map[string]any{
 			"subject": subject,
-			"uri":     "https://github.com/example/agent-os/releases/download/agent-os/v0.1.0-rc.1/" + subject,
+			"uri":     "https://github.com/example/agent-os/releases/download/v0.1.0-rc.1/" + subject,
 		},
 	}
 }

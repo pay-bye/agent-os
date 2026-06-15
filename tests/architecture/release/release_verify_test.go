@@ -34,7 +34,7 @@ func TestWorkflowSubjectsComeFromReleaseSubjects(t *testing.T) {
 }
 
 func TestGuardAllowsCandidateAfterDestinations(t *testing.T) {
-	output, err := runGuard(t, "agent-os/v0.1.0-rc.1", []string{
+	output, err := runGuard(t, "v0.1.0-rc.1", []string{
 		"GITHUB_REF_PROTECTED=true",
 		"PUBLIC_RELEASE_DESTINATIONS_READY=true",
 	})
@@ -46,7 +46,7 @@ func TestGuardAllowsCandidateAfterDestinations(t *testing.T) {
 }
 
 func TestGuardRejectsStableWithoutProof(t *testing.T) {
-	output, err := runGuard(t, "agent-os/v0.1.0", []string{
+	output, err := runGuard(t, "v0.1.0", []string{
 		"GITHUB_REF_PROTECTED=true",
 		"PUBLIC_RELEASE_DESTINATIONS_READY=true",
 	})
@@ -56,7 +56,7 @@ func TestGuardRejectsStableWithoutProof(t *testing.T) {
 }
 
 func TestGuardRejectsV1WithoutProductionEvidence(t *testing.T) {
-	output, err := runGuard(t, "agent-os/v1.0.0", []string{
+	output, err := runGuard(t, "v1.0.0", []string{
 		"GITHUB_REF_PROTECTED=true",
 		"PUBLIC_RELEASE_DESTINATIONS_READY=true",
 		"PARITY_PROOF_URI=https://evidence.example/parity",
@@ -64,4 +64,14 @@ func TestGuardRejectsV1WithoutProductionEvidence(t *testing.T) {
 
 	requireCommandFailure(t, err)
 	requireContains(t, output, "v1 release requires production and driver evidence")
+}
+
+func TestGuardRejectsNamespacedTag(t *testing.T) {
+	output, err := runGuard(t, "agent-os/v0.1.0-rc.1", []string{
+		"GITHUB_REF_PROTECTED=true",
+		"PUBLIC_RELEASE_DESTINATIONS_READY=true",
+	})
+
+	requireCommandFailure(t, err)
+	requireContains(t, output, "release tag must match vMAJOR.MINOR.PATCH")
 }

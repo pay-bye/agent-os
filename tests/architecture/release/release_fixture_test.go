@@ -387,6 +387,48 @@ func stepNamed(t *testing.T, job map[string]any, name string) map[string]any {
 	return nil
 }
 
+func requireStepBefore(t *testing.T, job map[string]any, first string, second string) {
+	t.Helper()
+
+	firstIndex := stepIndex(t, job, first)
+	secondIndex := stepIndex(t, job, second)
+	if firstIndex >= secondIndex {
+		t.Fatalf("%s step must run before %s", first, second)
+	}
+}
+
+func stepIndex(t *testing.T, job map[string]any, name string) int {
+	t.Helper()
+
+	for index, step := range sequence(t, job, "steps") {
+		item, ok := step.(map[string]any)
+		if !ok {
+			t.Fatal("workflow step must be a mapping")
+		}
+		if item["name"] == name {
+			return index
+		}
+	}
+	t.Fatalf("%s step not found", name)
+	return -1
+}
+
+func firstCheckedStep(t *testing.T, job string) string {
+	t.Helper()
+
+	switch job {
+	case "check":
+		return "Verify source"
+	case "integration":
+		return "Verify integration"
+	case "publish":
+		return "Check publish guard"
+	default:
+		t.Fatalf("unknown release job: %s", job)
+		return ""
+	}
+}
+
 func visitWorkflow(value any, items *[]string) {
 	switch typed := value.(type) {
 	case map[string]any:

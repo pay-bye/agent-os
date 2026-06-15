@@ -3,10 +3,6 @@ pro: true
 project_name: agent-os
 dist: dist/release
 
-monorepo:
-  tag_prefix: agent-os/
-  dir: .
-
 metadata:
   mod_timestamp: "{{ .CommitTimestamp }}"
 

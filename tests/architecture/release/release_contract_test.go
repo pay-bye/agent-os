@@ -10,7 +10,9 @@ func TestConfigBuildsAcceptedMatrix(t *testing.T) {
 	build := onlyItem(t, sequence(t, config, "builds"))
 
 	requireScalar(t, config, "pro", true)
-	requireScalar(t, mapping(t, config, "monorepo"), "tag_prefix", "agent-os/")
+	if _, ok := config["monorepo"]; ok {
+		t.Fatal("public release config must use repository-root tags")
+	}
 	requireScalar(t, build, "main", "./cmd/substrate")
 	requireScalar(t, build, "binary", "agent-os")
 	requireSequence(t, build, "goos", []string{"linux", "darwin"})
@@ -55,11 +57,14 @@ func TestInstallExamplesAreTyped(t *testing.T) {
 
 func TestWorkflowGuardsPublish(t *testing.T) {
 	workflow := readYAML(t, workflowPath(t))
+	trigger := mapping(t, workflow, "on")
+	push := mapping(t, trigger, "push")
 	jobs := mapping(t, workflow, "jobs")
 	publish := mapping(t, jobs, "publish")
 
+	requireSequence(t, push, "tags", []string{"v*"})
 	condition := textValue(t, publish, "if")
-	requireContains(t, condition, "refs/tags/agent-os/v")
+	requireContains(t, condition, "refs/tags/v")
 	requireContains(t, condition, "github.ref_protected == true")
 	requireContains(t, condition, "PUBLIC_RELEASE_DESTINATIONS_READY")
 	requireMapping(t, mapping(t, publish, "permissions"), map[string]any{
@@ -78,6 +83,21 @@ func TestWorkflowGuardsPublish(t *testing.T) {
 
 	provenance := mapping(t, jobs, "provenance")
 	requireScalar(t, mapping(t, provenance, "permissions"), "actions", "read")
+}
+
+func TestWorkflowInstallsPinnedGoShimBeforeChecks(t *testing.T) {
+	workflow := readYAML(t, workflowPath(t))
+	jobs := mapping(t, workflow, "jobs")
+
+	for _, name := range []string{"check", "integration", "publish"} {
+		job := mapping(t, jobs, name)
+		shim := stepNamed(t, job, "Install pinned Go shim")
+
+		requireContains(t, textValue(t, shim, "run"), "go install \"golang.org/dl/go${GO_VERSION}@latest\"")
+		requireContains(t, textValue(t, shim, "run"), "\"$(go env GOPATH)/bin/go${GO_VERSION}\" download")
+		requireContains(t, textValue(t, shim, "run"), "GITHUB_PATH")
+		requireStepBefore(t, job, "Install pinned Go shim", firstCheckedStep(t, name))
+	}
 }
 
 func TestWorkflowUsesCurrentToolPins(t *testing.T) {
