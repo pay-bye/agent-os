@@ -93,7 +93,6 @@ homebrew_casks:
     directory: Casks
     homepage: "https://github.com/{{ .Env.RELEASE_IMAGE_OWNER }}/agent-os"
     description: "Autonomous operations substrate"
-    skip_upload: true
 
 release:
   github:

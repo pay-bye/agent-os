@@ -32,7 +32,9 @@ func TestConfigPublishesAcceptedSurfaces(t *testing.T) {
 	requireScalar(t, cask, "name", "agent-os")
 	requireSliceContains(t, stringSequence(t, cask, "binaries"), "agent-os")
 	requireScalar(t, cask, "directory", "Casks")
-	requireScalar(t, cask, "skip_upload", true)
+	if _, ok := cask["skip_upload"]; ok {
+		t.Fatal("homebrew cask must publish to the configured tap")
+	}
 
 	signing := onlyItem(t, sequence(t, config, "signs"))
 	requireScalar(t, signing, "if", "{{ not .IsSnapshot }}")
