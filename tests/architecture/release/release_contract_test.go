@@ -24,6 +24,7 @@ func TestConfigPublishesAcceptedSurfaces(t *testing.T) {
 	config := readYAML(t, filepath.Join(findRoot(t), "quality", "release", "goreleaser.yaml"))
 
 	image := onlyItem(t, sequence(t, config, "dockers_v2"))
+	requireScalar(t, image, "dockerfile", "quality/release/Dockerfile")
 	requireContains(t, firstString(t, image, "images"), "ghcr.io/")
 	requireSequence(t, image, "platforms", []string{"linux/amd64", "linux/arm64"})
 	requireScalar(t, image, "sbom", true)
@@ -42,6 +43,14 @@ func TestConfigPublishesAcceptedSurfaces(t *testing.T) {
 
 	sbom := onlyItem(t, sequence(t, config, "sboms"))
 	requireScalar(t, sbom, "cmd", "syft")
+}
+
+func TestDockerfileCopiesPlatformScopedBinary(t *testing.T) {
+	content := readText(t, filepath.Join(findRoot(t), "quality", "release", "Dockerfile"))
+
+	requireContains(t, content, "ARG TARGETOS")
+	requireContains(t, content, "ARG TARGETARCH")
+	requireContains(t, content, "COPY ${TARGETOS}/${TARGETARCH}/agent-os /usr/local/bin/agent-os")
 }
 
 func TestInstallExamplesAreTyped(t *testing.T) {
