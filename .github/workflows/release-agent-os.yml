@@ -166,6 +166,14 @@ jobs:
           PARITY_PROOF_URI: ${{ vars.PARITY_PROOF_URI }}
           PRODUCTION_EVIDENCE_URI: ${{ vars.PRODUCTION_EVIDENCE_URI }}
           DRIVER_EVIDENCE_URI: ${{ vars.DRIVER_EVIDENCE_URI }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4.1.0
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         uses: goreleaser/goreleaser-action@v7.2.2
         with:

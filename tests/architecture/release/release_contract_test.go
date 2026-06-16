@@ -102,6 +102,22 @@ func TestWorkflowGuardsPublish(t *testing.T) {
 	requireScalar(t, mapping(t, provenance, "permissions"), "actions", "read")
 }
 
+func TestWorkflowPreparesImagePublishBeforeRelease(t *testing.T) {
+	workflow := readYAML(t, workflowPath(t))
+	publish := mapping(t, mapping(t, workflow, "jobs"), "publish")
+
+	buildx := stepNamed(t, publish, "Set up Docker Buildx")
+	requireScalar(t, buildx, "uses", "docker/setup-buildx-action@v4.1.0")
+	requireStepBefore(t, publish, "Set up Docker Buildx", "Release")
+
+	login := stepNamed(t, publish, "Log in to GitHub Container Registry")
+	requireScalar(t, login, "uses", "docker/login-action@v4.2.0")
+	requireScalar(t, mapping(t, login, "with"), "registry", "ghcr.io")
+	requireScalar(t, mapping(t, login, "with"), "username", "${{ github.actor }}")
+	requireScalar(t, mapping(t, login, "with"), "password", "${{ secrets.GITHUB_TOKEN }}")
+	requireStepBefore(t, publish, "Log in to GitHub Container Registry", "Release")
+}
+
 func TestWorkflowInstallsPinnedGoShimBeforeChecks(t *testing.T) {
 	workflow := readYAML(t, workflowPath(t))
 	jobs := mapping(t, workflow, "jobs")
@@ -184,6 +200,8 @@ func TestWorkflowUsesPinnedActions(t *testing.T) {
 	for _, expected := range []string{
 		"actions/checkout@v6.0.2",
 		"actions/setup-go@v6.4.0",
+		"docker/setup-buildx-action@v4.1.0",
+		"docker/login-action@v4.2.0",
 		"goreleaser/goreleaser-action@v7.2.2",
 		"actions/attest@v4.1.0",
 		"slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0",
