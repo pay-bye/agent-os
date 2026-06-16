@@ -66,6 +66,23 @@ func TestIntegrationRequiresControlPlaneTestDatabaseURL(t *testing.T) {
 	requireContains(t, output, "CONTROL_PLANE_TEST_DATABASE_URL")
 }
 
+func TestIntegrationAcceptsExportedControlPlaneTestDatabaseURL(t *testing.T) {
+	root := cleanRoot(t)
+	installCommands(t, root, commandBehavior{})
+
+	output, err := runScriptWithExtraEnv(
+		t,
+		root,
+		[]string{"CONTROL_PLANE_TEST_DATABASE_URL=postgres://x47"},
+		"--integration",
+	)
+
+	if err != nil {
+		t.Fatalf("expected exported integration env to run suites, got %v\n%s", err, output)
+	}
+	requireContains(t, output, "integration tests")
+}
+
 func TestIntegrationRunsSuites(t *testing.T) {
 	root := cleanRoot(t)
 	writeControlPlaneEnv(t, root, "postgres://x47")

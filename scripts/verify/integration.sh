@@ -21,6 +21,11 @@ verify_integration() {
 
 load_integration_env() {
   local env_file
+  if [[ -n "${CONTROL_PLANE_TEST_DATABASE_URL:-}" ]]; then
+    export DATABASE_URL="$CONTROL_PLANE_TEST_DATABASE_URL"
+    return
+  fi
+
   if ! env_file="$(integration_env_file)"; then
     print_integration_env_pointer
     return 1

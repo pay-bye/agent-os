@@ -157,6 +157,16 @@ func runScript(t *testing.T, root string, args ...string) (string, error) {
 	return string(output), err
 }
 
+func runScriptWithExtraEnv(t *testing.T, root string, extraEnv []string, args ...string) (string, error) {
+	t.Helper()
+
+	command := exec.Command(filepath.Join(root, "scripts", "verify.sh"), args...)
+	command.Dir = root
+	command.Env = append(commandEnvironment(root), extraEnv...)
+	output, err := command.CombinedOutput()
+	return string(output), err
+}
+
 func commandEnvironment(root string) []string {
 	env := make([]string, 0, len(os.Environ())+1)
 	for _, item := range os.Environ() {

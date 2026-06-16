@@ -64,6 +64,10 @@ jobs:
           go install "golang.org/dl/go${GO_VERSION}@latest"
           "$(go env GOPATH)/bin/go${GO_VERSION}" download
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Install release tools
+        run: |
+          go install github.com/sigstore/cosign/v3/cmd/cosign@${COSIGN_VERSION}
+          go install github.com/anchore/syft/cmd/syft@${SYFT_VERSION}
       - name: Verify source
         working-directory: ${{ steps.source.outputs.root }}
         run: ./scripts/verify.sh --unit
@@ -113,7 +117,7 @@ jobs:
         working-directory: ${{ steps.source.outputs.root }}
         run: ./scripts/verify.sh --integration
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable
+          CONTROL_PLANE_TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable
 
   publish:
     needs:

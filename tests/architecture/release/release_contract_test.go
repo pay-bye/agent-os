@@ -102,6 +102,17 @@ func TestWorkflowInstallsPinnedGoShimBeforeChecks(t *testing.T) {
 	}
 }
 
+func TestWorkflowInstallsReleaseToolsBeforeSnapshot(t *testing.T) {
+	workflow := readYAML(t, workflowPath(t))
+	check := mapping(t, mapping(t, workflow, "jobs"), "check")
+	tools := stepNamed(t, check, "Install release tools")
+
+	requireContains(t, textValue(t, tools, "run"), "go install github.com/sigstore/cosign/v3/cmd/cosign@${COSIGN_VERSION}")
+	requireContains(t, textValue(t, tools, "run"), "go install github.com/anchore/syft/cmd/syft@${SYFT_VERSION}")
+	requireStepBefore(t, check, "Install release tools", "Check release config")
+	requireStepBefore(t, check, "Install release tools", "Snapshot release")
+}
+
 func TestWorkflowUsesCurrentToolPins(t *testing.T) {
 	workflow := readYAML(t, workflowPath(t))
 	env := mapping(t, workflow, "env")
@@ -146,7 +157,7 @@ func TestWorkflowRunsIntegrationWithPostgres(t *testing.T) {
 	requireScalar(
 		t,
 		mapping(t, verify, "env"),
-		"DATABASE_URL",
+		"CONTROL_PLANE_TEST_DATABASE_URL",
 		"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable",
 	)
 }
