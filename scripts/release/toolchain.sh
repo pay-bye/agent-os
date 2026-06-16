@@ -51,7 +51,7 @@ run_goreleaser() {
     RELEASE_TAP_OWNER="${RELEASE_TAP_OWNER:-example}" \
     RELEASE_TAP_NAME="${RELEASE_TAP_NAME:-homebrew-tap}" \
     RELEASE_TAP_TOKEN="${RELEASE_TAP_TOKEN:-}" \
-    DISTRIBUTION=pro \
+    DISTRIBUTION=oss \
     VERSION="$GORELEASER_VERSION" \
     bash -s -- "$@"
 }

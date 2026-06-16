@@ -245,17 +245,25 @@ func fakeToolchainGo() string {
 }
 
 func fakeReleaseRunner() string {
-	return "#!/usr/bin/env bash\n" +
-		"cat <<'SCRIPT'\n" +
-		"#!/usr/bin/env bash\n" +
-		"set -euo pipefail\n" +
-		"if [[ \"$1\" == \"check\" && \"$2\" == \"--config\" && \"$3\" == \"quality/release/goreleaser.yaml\" ]]; then\n" +
-		"  echo \"config checked\"\n" +
-		"  exit 0\n" +
-		"fi\n" +
-		"echo \"unexpected release args: $*\" >&2\n" +
-		"exit 1\n" +
-		"SCRIPT\n"
+	return `#!/usr/bin/env bash
+cat <<'SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$*" in
+  "check --config quality/release/goreleaser.yaml")
+    echo "config checked"
+    ;;
+  "release --config quality/release/goreleaser.yaml --snapshot --clean --skip=publish,sign")
+    echo "snapshot checked"
+    ;;
+  *)
+    echo "unexpected release args: $*" >&2
+    exit 1
+    ;;
+esac
+SCRIPT
+`
 }
 
 func decodedSubjects(t *testing.T, output string) string {

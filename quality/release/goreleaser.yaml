@@ -1,5 +1,4 @@
 version: 2
-pro: true
 project_name: agent-os
 dist: dist/release
 
@@ -70,7 +69,6 @@ sboms:
 
 signs:
   - id: checksums
-    if: "{{ not .IsSnapshot }}"
     cmd: cosign
     signature: "${artifact}.sigstore.json"
     args:

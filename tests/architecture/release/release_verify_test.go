@@ -14,14 +14,26 @@ func TestConfigCheckUsesGoShimFromGoPath(t *testing.T) {
 	requireContains(t, output, "config checked")
 }
 
-func TestWorkflowChecksProSnapshot(t *testing.T) {
+func TestSnapshotCheckSkipsPublishAndSign(t *testing.T) {
+	root := releaseRoot(t, nil)
+	installReleaseCommands(t, root)
+
+	output, err := runReleaseScriptWithEnv(t, root, releaseCommandEnv(root), "--snapshot")
+
+	if err != nil {
+		t.Fatalf("expected snapshot check to pass, got %v\n%s", err, output)
+	}
+	requireContains(t, output, "snapshot checked")
+}
+
+func TestWorkflowChecksSnapshotThroughReleaseScript(t *testing.T) {
 	workflow := readYAML(t, workflowPath(t))
 	check := mapping(t, mapping(t, workflow, "jobs"), "check")
 	snapshot := stepNamed(t, check, "Snapshot release")
 
 	requireScalar(t, snapshot, "run", "./scripts/release-check.sh --snapshot")
 	if _, ok := snapshot["uses"]; ok {
-		t.Fatal("check snapshot must not invoke the OSS GoReleaser action against a Pro config")
+		t.Fatal("check snapshot must run through the release script")
 	}
 }
 

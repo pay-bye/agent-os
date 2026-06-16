@@ -9,7 +9,9 @@ func TestConfigBuildsAcceptedMatrix(t *testing.T) {
 	config := readYAML(t, filepath.Join(findRoot(t), "quality", "release", "goreleaser.yaml"))
 	build := onlyItem(t, sequence(t, config, "builds"))
 
-	requireScalar(t, config, "pro", true)
+	if _, ok := config["pro"]; ok {
+		t.Fatal("public release config must use the OSS GoReleaser distribution")
+	}
 	if _, ok := config["monorepo"]; ok {
 		t.Fatal("public release config must use repository-root tags")
 	}
@@ -38,7 +40,9 @@ func TestConfigPublishesAcceptedSurfaces(t *testing.T) {
 	}
 
 	signing := onlyItem(t, sequence(t, config, "signs"))
-	requireScalar(t, signing, "if", "{{ not .IsSnapshot }}")
+	if _, ok := signing["if"]; ok {
+		t.Fatal("public release signing must not depend on GoReleaser Pro-only conditionals")
+	}
 	requireScalar(t, signing, "cmd", "cosign")
 
 	sbom := onlyItem(t, sequence(t, config, "sboms"))
@@ -85,8 +89,10 @@ func TestWorkflowGuardsPublish(t *testing.T) {
 		"attestations": "write",
 	})
 	release := stepNamed(t, publish, "Release")
-	requireScalar(t, mapping(t, release, "with"), "distribution", "goreleaser-pro")
-	requireScalar(t, mapping(t, release, "env"), "GORELEASER_KEY", "${{ secrets.GORELEASER_KEY }}")
+	requireScalar(t, mapping(t, release, "with"), "distribution", "goreleaser")
+	if _, ok := mapping(t, release, "env")["GORELEASER_KEY"]; ok {
+		t.Fatal("public release workflow must not require a GoReleaser license key")
+	}
 	requireScalar(t, mapping(t, release, "env"), "RELEASE_IMAGE_OWNER", "${{ vars.RELEASE_IMAGE_OWNER }}")
 	requireScalar(t, mapping(t, release, "env"), "RELEASE_TAP_OWNER", "${{ vars.RELEASE_TAP_OWNER }}")
 	requireScalar(t, mapping(t, release, "env"), "RELEASE_TAP_NAME", "${{ vars.RELEASE_TAP_NAME }}")

@@ -169,13 +169,12 @@ jobs:
       - name: Release
         uses: goreleaser/goreleaser-action@v7.2.2
         with:
-          distribution: goreleaser-pro
+          distribution: goreleaser
           version: ${{ env.GORELEASER_VERSION }}
           workdir: ${{ steps.source.outputs.root }}
           args: release --config quality/release/goreleaser.yaml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
           RELEASE_IMAGE_OWNER: ${{ vars.RELEASE_IMAGE_OWNER }}
           RELEASE_TAP_OWNER: ${{ vars.RELEASE_TAP_OWNER }}
           RELEASE_TAP_NAME: ${{ vars.RELEASE_TAP_NAME }}
